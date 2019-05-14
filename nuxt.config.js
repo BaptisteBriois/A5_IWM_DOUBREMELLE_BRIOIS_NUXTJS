@@ -4,7 +4,7 @@ export default {
   mode: 'universal',
 
   env: {
-    baseUrl: "https://my-json-server.typicode.com/alexandre-tobia/api-sample"
+    baseUrl: "http://localhost:3004"
   },
 
   /*

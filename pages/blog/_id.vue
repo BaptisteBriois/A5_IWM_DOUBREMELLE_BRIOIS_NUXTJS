@@ -32,7 +32,7 @@
                 <b-button
                 variant="secondary"
                 class="float-right"
-                @click="show=false"
+                @click="$bvModal.hide('modal-edit-article')"
                 >
                     Annuler
                 </b-button>

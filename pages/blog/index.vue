@@ -2,10 +2,9 @@
     <div class="container">
         <h2>
             {{ title }}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
-                Créer un article
-            </button>
+            <b-button v-b-modal.articleModal>Créer un article</b-button>
         </h2>
+
         <ul>
             <li v-for="article in articles" :key="article.id">
                 <nuxt-link :to="{name: 'blog-id', params: {id: article.id}}">
@@ -14,35 +13,52 @@
             </li>
         </ul>
 
-        <!-- Modal -->
-        <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Création d'un article</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="title">Titre</label>
-                                <input type="text" class="form-control" id="title" name="title" placeholder="Mon titre" v-model="article.title">
-                            </div>
-                            <div class="form-group">
-                                <label for="content">Contenu de l'article</label>
-                                <textarea rows="8" class="form-control" id="content" name="content" placeholder="Mon article" v-model="article.content"></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal" @click="createArticle">Créer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <b-modal id="articleModal" title="BootstrapVue" centered size="lg">
+            <b-form-group
+                id="formGroupTitle"
+                label="Titre de l'article"
+                label-for="formTitle"
+            >
+                <b-form-input
+                    id="formTitle"
+                    v-model="article.title"
+                    type="text"
+                    required
+                    placeholder="Mon titre"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+                id="formGroupContent"
+                label="Contenu de l'article"
+                label-for="formContent"
+            >
+                <b-form-textarea
+                    id="formContent"
+                    v-model="article.content"
+                    placeholder="Mon article"
+                    rows="4"
+                    max-rows="8"
+                ></b-form-textarea>
+            </b-form-group>
+
+            <template slot="modal-footer">
+                <b-button
+                    variant="secondary"
+                    class="float-right"
+                    @click="$bvModal.hide('articleModal')"
+                >
+                    Annuler
+                </b-button>
+                <b-button
+                    variant="success"
+                    class="float-right"
+                    @click="createArticle"
+                >
+                    Créer
+                </b-button>
+            </template>
+        </b-modal>
     </div>
 </template>
 
@@ -52,6 +68,7 @@
     export default {
         async asyncData() {
             const { data } = await axios.get('/posts');
+
             return {
                 articles: data
             }
@@ -83,14 +100,15 @@
                     title: this.article.title,
                     content: this.article.content,
                 })
+                    .then(response => {
+                        this.articles.push(response.data);
+                        this.$bvModal.hide('articleModal')
+                    })
             }
         }
     }
 </script>
 
 <style scoped>
-    .container {
-        width: 980px;
-        margin: 0 auto;
-    }
+
 </style>

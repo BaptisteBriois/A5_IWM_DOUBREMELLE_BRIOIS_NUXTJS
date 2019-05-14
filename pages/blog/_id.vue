@@ -9,7 +9,7 @@
         </nuxt-link>
 
         <!-- Button trigger modal -->
-        <b-button v-b-modal.modal-edit-article variant="primary">
+        <b-button v-b-modal.editArticleModal variant="primary">
             Modifier
         </b-button>
 
@@ -17,7 +17,7 @@
             Supprimer
         </button>
 
-        <b-modal id="modal-edit-article" title="Modifier l'article" centered size="lg">
+        <b-modal id="editArticleModal" title="Modifier l'article" centered size="lg">
             <form>
                 <div class="form-group">
                     <label for="formTitle">Titre</label>
@@ -32,7 +32,7 @@
                 <b-button
                 variant="secondary"
                 class="float-right"
-                @click="$bvModal.hide('modal-edit-article')"
+                @click="$bvModal.hide('editArticleModal')"
                 >
                     Annuler
                 </b-button>
@@ -75,6 +75,7 @@
                 ]
             }
         },
+
         methods: {
             editArticle() {
                 axios.put(`/posts/${this.currentArticle.id}`, {
@@ -82,9 +83,10 @@
                     content: this.currentArticle.content,
                 })
                     .then(response => {
-                        this.$bvModal.hide('modal-edit-article')
+                        this.$bvModal.hide('editArticleModal')
                     })
             },
+
             deleteArticle() {
                 axios.delete(`/posts/${this.currentArticle.id}`)
                     .then(response => {

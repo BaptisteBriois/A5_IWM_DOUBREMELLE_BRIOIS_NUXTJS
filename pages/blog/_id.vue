@@ -9,43 +9,43 @@
         </nuxt-link>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        <b-button v-b-modal.modal-edit-article variant="primary">
             Modifier
-        </button>
+        </b-button>
 
         <button type="button" class="btn btn-danger" @click="deleteArticle">
             Supprimer
         </button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modifier l'article</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="title">Titre</label>
-                                <input type="text" class="form-control" id="title" v-model="currentArticle.title">
-                            </div>
-                            <div class="form-group">
-                                <label for="content">Contenu</label>
-                                <textarea class="form-control" id="content" rows="4" v-model="currentArticle.content"></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal" @click="editArticle">Sauvegarder</button>
-                    </div>
+        <b-modal id="modal-edit-article" title="Modifier l'article" centered size="lg">
+            <form>
+                <div class="form-group">
+                    <label for="formTitle">Titre</label>
+                    <input type="text" class="form-control" id="formTitle" v-model="currentArticle.title">
                 </div>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label for="formContent">Contenu</label>
+                    <textarea class="form-control" id="formContent" rows="4" v-model="currentArticle.content"></textarea>
+                </div>
+            </form>
+            <template slot="modal-footer">
+                <b-button
+                variant="secondary"
+                class="float-right"
+                @click="show=false"
+                >
+                    Annuler
+                </b-button>
+                <b-button
+                variant="success"
+                class="float-right"
+                @click="editArticle"
+                >
+                    Sauvegarder
+                </b-button>
+            </template>
+        </b-modal>
+
     </div>
 </template>
 
@@ -81,6 +81,9 @@
                     title: this.currentArticle.title,
                     content: this.currentArticle.content,
                 })
+                    .then(response => {
+                        this.$bvModal.hide('modal-edit-article')
+                    })
             },
             deleteArticle() {
                 axios.delete(`/posts/${this.currentArticle.id}`)

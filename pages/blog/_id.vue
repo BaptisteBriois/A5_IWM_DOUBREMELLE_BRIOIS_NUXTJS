@@ -1,8 +1,8 @@
 <template>
     <div v-if="currentArticle" class="container">
-        <h1>{{ currentArticle.name }}</h1>
+        <h1>{{ currentArticle.title }}</h1>
 
-        <p>{{ currentArticle.description }}</p>
+        <p>{{ currentArticle.content }}</p>
 
         <nuxt-link :to="{name: 'blog'}">
             <button class="btn btn-secondary">Retour</button>
@@ -11,6 +11,10 @@
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
             Modifier
+        </button>
+
+        <button type="button" class="btn btn-danger" @click="deleteArticle">
+            Supprimer
         </button>
 
         <!-- Modal -->
@@ -27,11 +31,11 @@
                         <form>
                             <div class="form-group">
                                 <label for="formTitle">Titre</label>
-                                <input type="text" class="form-control" id="formTitle" v-model="currentArticle.name">
+                                <input type="text" class="form-control" id="formTitle" v-model="currentArticle.title">
                             </div>
                             <div class="form-group">
                                 <label for="formContent">Contenu</label>
-                                <textarea class="form-control" id="formContent" rows="4" v-model="currentArticle.description"></textarea>
+                                <textarea class="form-control" id="formContent" rows="4" v-model="currentArticle.content"></textarea>
                             </div>
                         </form>
                     </div>
@@ -65,7 +69,7 @@
 
         head() {
             return {
-                title: `${this.currentArticle.name} | Mon site internet`,
+                title: `${this.currentArticle.title} | Mon site internet`,
                 meta: [
                     {}
                 ]
@@ -74,9 +78,15 @@
         methods: {
             editArticle() {
                 axios.put(`/posts/${this.currentArticle.id}`, {
-                    name: this.currentArticle.name,
-                    description: this.currentArticle.description,
+                    title: this.currentArticle.title,
+                    content: this.currentArticle.content,
                 })
+            },
+            deleteArticle() {
+                axios.delete(`/posts/${this.currentArticle.id}`)
+                    .then(response => {
+                        this.$router.push({ name: 'blog'})
+                    })
             }
         }
     }

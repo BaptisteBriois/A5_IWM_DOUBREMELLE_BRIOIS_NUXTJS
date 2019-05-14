@@ -9,7 +9,7 @@
         </nuxt-link>
 
         <!-- Button trigger modal -->
-        <b-button v-b-modal.editArticleModal variant="primary">
+        <b-button variant="primary" @click="showModal">
             Modifier
         </b-button>
 
@@ -21,11 +21,11 @@
             <form>
                 <div class="form-group">
                     <label for="formTitle">Titre</label>
-                    <input type="text" class="form-control" id="formTitle" v-model="currentArticle.title">
+                    <input type="text" class="form-control" id="formTitle" v-model="title">
                 </div>
                 <div class="form-group">
                     <label for="formContent">Contenu</label>
-                    <textarea class="form-control" id="formContent" rows="4" v-model="currentArticle.content"></textarea>
+                    <textarea class="form-control" id="formContent" rows="4" v-model="content"></textarea>
                 </div>
             </form>
             <template slot="modal-footer">
@@ -63,7 +63,9 @@
 
         data() {
             return {
-                currentArticle: null
+                currentArticle: null,
+                title: 'a',
+                content: 'a'
             }
         },
 
@@ -75,18 +77,23 @@
                 ]
             }
         },
-
         methods: {
+            showModal() {
+                this.title = this.currentArticle.title;
+                this.content = this.currentArticle.content;
+                this.$bvModal.show('editArticleModal')
+            },
             editArticle() {
                 axios.put(`/posts/${this.currentArticle.id}`, {
-                    title: this.currentArticle.title,
-                    content: this.currentArticle.content,
+                    title: this.title,
+                    content: this.content,
                 })
                     .then(response => {
+                        this.currentArticle.title = this.title;
+                        this.currentArticle.content = this.content;
                         this.$bvModal.hide('editArticleModal')
                     })
             },
-
             deleteArticle() {
                 axios.delete(`/posts/${this.currentArticle.id}`)
                     .then(response => {

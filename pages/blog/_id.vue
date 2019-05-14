@@ -69,7 +69,7 @@
 
         head() {
             return {
-                title: `${this.currentArticle.title} | Mon site internet`,
+                title: `${this.currentArticle.title} | Blog`,
                 meta: [
                     {}
                 ]

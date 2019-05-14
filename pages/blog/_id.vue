@@ -30,12 +30,12 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="formTitle">Titre</label>
-                                <input type="text" class="form-control" id="formTitle" v-model="currentArticle.title">
+                                <label for="title">Titre</label>
+                                <input type="text" class="form-control" id="title" v-model="currentArticle.title">
                             </div>
                             <div class="form-group">
-                                <label for="formContent">Contenu</label>
-                                <textarea class="form-control" id="formContent" rows="4" v-model="currentArticle.content"></textarea>
+                                <label for="content">Contenu</label>
+                                <textarea class="form-control" id="content" rows="4" v-model="currentArticle.content"></textarea>
                             </div>
                         </form>
                     </div>

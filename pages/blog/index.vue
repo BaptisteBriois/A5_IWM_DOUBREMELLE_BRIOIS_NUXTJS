@@ -1,35 +1,44 @@
 <template>
     <div class="container">
-        <h2>{{ title }}</h2>
+        <h2>
+            {{ title }}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
+                Créer un article
+            </button>
+        </h2>
         <ul>
             <li v-for="article in articles" :key="article.id">
                 <nuxt-link :to="{name: 'blog-id', params: {id: article.id}}">
-                    {{ article.name }}
+                    {{ article.title }}
                 </nuxt-link>
             </li>
         </ul>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Launch demo modal
-        </button>
-
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <h5 class="modal-title" id="modalLabel">Création d'un article</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <form>
+                            <div class="form-group">
+                                <label for="title">Titre</label>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="Mon titre" v-model="article.title">
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Contenu de l'article</label>
+                                <textarea rows="8" class="form-control" id="content" name="content" placeholder="Mon article" v-model="article.content"></textarea>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" @click="createArticle">Créer</button>
                     </div>
                 </div>
             </div>
@@ -51,7 +60,29 @@
         data() {
             return {
                 title: "Mes articles",
-                articles: []
+                articles: [],
+                article: {
+                    title: "",
+                    content: ""
+                }
+            }
+        },
+
+        head() {
+            return {
+                title: "Liste des articles",
+                meta: [
+                    {}
+                ]
+            }
+        },
+
+        methods: {
+            createArticle() {
+                axios.post("/posts", {
+                    title: this.article.title,
+                    content: this.article.content,
+                })
             }
         }
     }

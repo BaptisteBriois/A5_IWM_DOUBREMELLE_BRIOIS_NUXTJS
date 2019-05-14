@@ -16,7 +16,7 @@
 
     export default {
         async asyncData() {
-            const { data } = await axios.get('/servers');
+            const { data } = await axios.get('/posts');
             return {
                 articles: data
             }

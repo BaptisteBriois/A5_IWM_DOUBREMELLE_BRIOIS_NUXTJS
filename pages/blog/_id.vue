@@ -15,7 +15,7 @@
 
     export default {
         async asyncData({ params }) {
-            const { data } = await axios.get(`/servers/${params.id}`);
+            const { data } = await axios.get(`/posts/${params.id}`);
 
             return {
                 currentArticle: data
